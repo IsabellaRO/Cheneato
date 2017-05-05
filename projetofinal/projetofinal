@@ -1,0 +1,33 @@
+import numpy as np
+import cv2
+
+
+# Load the image in color
+image = cv2.imread("passaro.jpg",cv2.IMREAD_COLOR)
+
+
+def auto_canny(image, sigma=0.33):
+    # compute the median of the single channel pixel intensities
+    v = np.median(image)
+
+    # apply automatic Canny edge detection using the computed median
+    lower = int(max(0, (1.0 - sigma) * v))
+    upper = int(min(255, (1.0 + sigma) * v))
+    edged = cv2.Canny(image, lower, upper)
+
+    # return the edged image
+    return edged
+
+
+# Convert the frame to grayscale
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+# A gaussian blur to get rid of the noise in the image
+blur = cv2.GaussianBlur(gray,(5,5),25) #aumentamos o blur
+# Detect the edges present in the image
+bordas = auto_canny(blur)
+
+# Show the image with the contours
+cv2.imshow("contours",bordas)
+
+vetor = np.nonzero(bordas)
+print(vetor)
