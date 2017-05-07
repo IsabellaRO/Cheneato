@@ -6,7 +6,7 @@ import cv2
 image = cv2.imread("passaro.jpg",cv2.IMREAD_COLOR)
 
 
-def auto_canny(image, sigma=0.33):
+def auto_canny(image, sigma = 0.33):
     # compute the median of the single channel pixel intensities
     v = np.median(image)
 
@@ -29,5 +29,11 @@ bordas = auto_canny(blur)
 # Show the image with the contours
 cv2.imshow("contours",bordas)
 
+
+# Getting 2 arrays of the positions os x and y for the painted pixels
 vetor = np.nonzero(bordas)
 print(vetor)
+
+# Unifiyng the 2 2D arrays to 1 3D arrays (coordinates for Neato)
+coordinates = np.transpose(vetor)
+print(coordinates)
