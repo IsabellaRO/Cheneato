@@ -13,12 +13,30 @@ contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIM
 contorno = (255-thresh)
 cv2.imwrite('lalala.png', contorno)
 
-coord = []
-for i in contours:
-	for j in contour
-	coord.append(contours[i])
+print(contours)
 
-print(coord)
+for cnt in contours:
+	cnt = cnt.reshape(cnt.shape[0], 2)
+	print('num pontos', cnt.shape[0])
+	media_cnt = np.sum(cnt, axis=0)/cnt.shape[0]
+	cv2.circle(contorno, tuple(media_cnt), 10, (128, 128, 0))	
+	cv2.drawContours(contorno, [cnt], -1, (0, 0, 255), 3)
+
+cv2.namedWindow("janela")
+cv2.imshow("janela", contorno)
+
+# coord = []
+# for i in contours:
+# 	for j in contours:
+# 	coord.append(contours[i])
+
+# print(coord)
+
+for c in contours:
+	print("cont shape", c.shape)
+	for i in range(c.shape[0]):
+		print("x", c[i][0][0], " y", c[i][0][1])
+
 
 #img = cv2.drawContours(thresh, contours, -1, (0,255,0), 3)
 #print(img)
