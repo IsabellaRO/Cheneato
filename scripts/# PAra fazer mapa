@@ -26,32 +26,6 @@ roslaunch turtlebot_rviz_launchers view_navigation.launch
 
  http://answers.ros.org/question/47973/publishing-to-move_base_simplegoal/
 
+rostopic pub /move_base_simple/goal geometry_msgs/PoseStamped '{ header: { frame_id: "/odom" }, pose: { position: { x: -3, y: -0.5, z: 0.0 }, orientation: { x: 0, y: 0, z: 1, w: 0.16 } } }'
 
-borg@indigo1204:~/catkin_ws/src/robotica16/Cheneato$ rostopic pub /robot_0/move_base_simple/goal geometry_msgs/PoseStamped '{ header: { frame_id: "/map" }, pose: { position: { x: 0, y: 0 }, orientation: { x: 0, y: 0, z: 0, w: 0 } } }'^C
-borg@indigo1204:~/catkin_ws/src/robotica16/Cheneato$ rostopic echo move_base_simple/goal
-WARNING: no messages received and simulated time is active.
-Is /clock being published?
-header: 
-  seq: 3
-  stamp: 
-    secs: 2260
-    nsecs: 180000000
-  frame_id: odom
-pose: 
-  position: 
-    x: -1.63670516014
-    y: -0.250290185213
-    z: 0.0
-  orientation: 
-    x: 0.0
-    y: 0.0
-    z: 0.988170475485
-    w: 0.153359418947
----
-
-rostopic pub /robot_0/move_base_simple/goal geometry_msgs/PoseStamped '{ header: { frame_id: "odom" }, pose: { position: { x: 0, y: 0 }, orientation: { x: 0, y: 0, z: 0, w: 0 } } }'
-
-rostopic pub /move_base_simple/goal geometry_msgs/PoseStamped '{ header: { frame_id: "odom" }, pose: { position: { x: -2, y: -0.3, z:0.0 }, orientation: { x: 0, y: 0, z: 1, w: 0.16 } } }'
-
-
-borg@indigo1204:~/catkin_ws/src/robotica16/Cheneato$ rostopic pub /move_base_simple/goal geometry_msgs/PoseStamped '{ header: { frame_id: "/odom" }, pose: { position: { x: -2, y: -0.3, z: 0.0 }, orientation: { x: 0, y: 0, z: 1, w: 0.16 } } }'
+roslaunch turtlebot_rviz_launchers view_navigation.launch

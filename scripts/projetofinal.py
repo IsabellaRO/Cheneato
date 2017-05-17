@@ -35,21 +35,57 @@ def criaContorno(imagem): #retorna array de contornos com aprox.
 if __name__=="__main__":
 
 	rospy.init_node("projetofinal")
-	posicao_atual = rospy.Publisher("/move_base/goal", Pose, queue_size = 1)
-	contours = criaContorno("/home/borg/catkin_ws/src/robotica16/Cheneato/scripts/estrela.jpg")
+	posicao_atual = rospy.Publisher("move_base_simple/goal", PoseStamped, queue_size = 1)
+	contours = criaContorno("/home/borg/catkin_ws/src/robotica16/Cheneato/scripts/linha.png")
+	# try:
+
+	# 	while not rospy.is_shutdown():
+	# 		pose = geometry_msgs.msg.PoseStamped()
+	# 		pose.header.frame_id = "/odom"
+	# 		for c in contours:
+	# 			for i in range(c.shape[0]):
+	#				x = c[i][0][0]
+	#				y = c[i][0][1]
+	# 				pose.pose.position.x = c[i][0][0]
+	# 				pose.pose.position.y = y	
+	# 				pose.pose.position.z = 0.
+	# 				pose.pose.orientation.x = 0.0
+	# 				pose.pose.orientation.y = 0.0
+	# 				pose.pose.orientation.z = 1
+	# 				pose.pose.orientation.w = 0.16
+
+	# 				posicao_atual.publish(pose)
+	# 				rospy.sleep(0.8)
+
+
+	# except rospy.ROSInterruptException:
+	#     print("Ocorreu uma excecao com o rospy")
+
+
+
+
+
 	try:
 
 		while not rospy.is_shutdown():
-			
-			# for c in contours:
-			# 	for i in range(c.shape[0]):
-			# 		pose = geometry_msgs.msg.Pose()
-			# 		pose.position.x = c[i][0][0]
-			# 		pose.position.y = c[i][0][1]
-			# 		posicao_atual.publish(pose)
-			# 		print(c[i][0][0], c[i][0][1])
-			# 		rospy.sleep(0.2)
+			pose = geometry_msgs.msg.PoseStamped()
+			pose.header.frame_id = "/odom"
+			for c in contours:
+
+				for i in range(c.shape[0]):
+					# OS QUATRO PRIMEIROS ELEMENTOS ESTAO MUITO ESTRANHO, MAS MESMO QUANDO RETIRADOS E O NUMERÓ É DIVIDIDO POR 100, O ROBO NAO ANDA
+
+					pose.pose.position.x = c[i][0][0]/100
+					pose.pose.position.y = c[i][0][1]/100
+					pose.pose.position.z = 0.0
+					pose.pose.orientation.x = 0.0
+					pose.pose.orientation.y = 0.0
+					pose.pose.orientation.z = 1
+					pose.pose.orientation.w = 1
+
+					posicao_atual.publish(pose)
+					rospy.sleep(1)
+
 
 	except rospy.ROSInterruptException:
 	    print("Ocorreu uma excecao com o rospy")
-
