@@ -1,0 +1,29 @@
+# PAra fazer mapa
+
+1. Conectar com robô ou abrir o simulador
+
+2. roslaunch neato_2dnav gmapping_demo.launch
+
+# Salva o mapa
+
+rosrun map_server map_saver
+
+salva o mapa em ./catkin_ws/src/robotica16/Cheneato/
+
+abrir mapa no rviz
+roslaunch neato_2dnav amcl_builtin.launch map_file:=`rospack find neato_2dnav`/maps/map.yaml
+roslaunch turtlebot_rviz_launchers view_navigation.launch
+
+
+-/move_base/goal
+
+-----------------------------------------------------------
+# borg@indigo1204:~/catkin_ws/src/robotica16/Cheneato$ evince map.pgm 
+# borg@indigo1204:~/catkin_ws/src/robotica16/Cheneato$ nautilus .
+
+
+ rostopic pub /robot_0/move_base_simple/goal geometry_msgs/PoseStamped '{ header: { frame_id: "/map" }, pose: { position: { x: 0, y: 0 }, orientation: { x: 0, y: 0, z: 0, w: 0 } } }'
+
+ http://answers.ros.org/question/47973/publishing-to-move_base_simplegoal/
+
+ 

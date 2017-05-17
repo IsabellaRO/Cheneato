@@ -1,0 +1,20 @@
+Conexão com Neatos roslaunch neato_node bringup.launch host:=IP_DO_ROBO
+
+tópicos: rostopic list
+
+tipo de um tópico: rostopic info NOME_DO_TOPICO
+
+monitorar um tópico: rostopic echo NOME_DO_TOPICO
+
+controle remoto: rosrun teleop_twist_keyboard teleop_twist_keyboard.py
+simulador: roslaunch neato_simulator neato_playground.launch
+câmera: roslaunch ros2opencv usb_cam.launch
+calibrar cam: rviz rviz
+https://insper.blackboard.com/webapps/blackboard/execute/announcement?method=search&context=course_entry&course_id=_25857_1&handle=announcements_entry&mode=view
+https://github.com/mirwox/robot17/tree/master/guides
+https://github.com/mirwox/robot17/blob/master/guides/stdr_add_robot.png
+https://github.com/mirwox/robot17/tree/master/guides
+https://github.com/mirwox/robot17/blob/master/guides/debugar_sem_robo_opencv.md
+https://github.com/mirwox/robot17/blob/master/guides/calibrar_camera.md
+https://github.com/mirwox/robot17/blob/master/guides/atividade1_ros.md
+
