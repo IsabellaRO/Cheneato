@@ -74,17 +74,19 @@ if __name__=="__main__":
 
 				for i in range(c.shape[0]):
 					# OS QUATRO PRIMEIROS ELEMENTOS ESTAO MUITO ESTRANHO, MAS MESMO QUANDO RETIRADOS E O NUMERÓ É DIVIDIDO POR 100, O ROBO NAO ANDA
-
-					pose.pose.position.x = c[i][0][0]/100
-					pose.pose.position.y = c[i][0][1]/100
+					
+					pose.pose.position.x = round((c[i][0][0]/250.0),3)
+					pose.pose.position.y = round((c[i][0][1]/250.0),3)
 					pose.pose.position.z = 0.0
 					pose.pose.orientation.x = 0.0
 					pose.pose.orientation.y = 0.0
 					pose.pose.orientation.z = 1
 					pose.pose.orientation.w = 1
 
+					print(pose.pose.position.x,pose.pose.position.y)
+
 					posicao_atual.publish(pose)
-					rospy.sleep(1)
+					rospy.sleep(4)
 
 
 	except rospy.ROSInterruptException:
