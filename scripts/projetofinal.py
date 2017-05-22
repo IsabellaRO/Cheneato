@@ -10,6 +10,7 @@ import cv2
 import rospy
 import geometry_msgs.msg
 
+terminou = False
 
 # Load the image in color
 def criaContorno(imagem): #retorna array de contornos com aprox.
@@ -22,72 +23,47 @@ def criaContorno(imagem): #retorna array de contornos com aprox.
 	contorno = (255-thresh) #inverte preto e branco
 	##cv2.imwrite('lalala.png', contorno) #salva imagem
 	for cnt in contours: #loop 
-		cnt = cnt.reshape(cnt.shape[0], 2)
-	# 	print('num pontos', cnt.shape[0]) #printa numero de pontos de cada array
-	 	media_cnt = np.sum(cnt, axis=0)/cnt.shape[0] #media dos valores dos pontos
-	# 	print(media_cnt)
-	 	cv2.circle(contorno, tuple(media_cnt), 10, (128, 128, 0))	
-	 	cv2.drawContours(contorno, [cnt], -1, (0, 0, 255), 3)
-	 	cv2.imwrite("aloka.png", contorno) #cria a imagem com contorno
+         cnt = cnt.reshape(cnt.shape[0], 2)
+         media_cnt = np.sum(cnt, axis=0)/cnt.shape[0] #media dos valores dos pontos
+         cv2.circle(contorno, tuple(media_cnt), 10, (128, 128, 0))	
+         cv2.drawContours(contorno, [cnt], -1, (0, 0, 255), 3)
+         cv2.imwrite("aloka.png", contorno) #cria a imagem com contorno
 	return contours
 
 
+def ver_atualizacao(dado):
+    if dado.status == 0 or dado.status == 1 or dado.status == 3:
+        terminou = True
+
 if __name__=="__main__":
 
-	rospy.init_node("projetofinal")
-	posicao_atual = rospy.Publisher("move_base_simple/goal", PoseStamped, queue_size = 1)
-	contours = criaContorno("/home/borg/catkin_ws/src/robotica16/Cheneato/scripts/linha.png")
-	# try:
+     rospy.init_node("projetofinal")
+     posicao_atual = rospy.Publisher("move_base_simple/goal", PoseStamped, queue_size = 1)
+     contours = criaContorno("/home/borg/catkin_ws/src/robotica16/Cheneato/scripts/linha.png")
+     status = rospy.Subscriber("move_base/status", ver_atualizacao)
 
-	# 	while not rospy.is_shutdown():
-	# 		pose = geometry_msgs.msg.PoseStamped()
-	# 		pose.header.frame_id = "/odom"
-	# 		for c in contours:
-	# 			for i in range(c.shape[0]):
-	#				x = c[i][0][0]
-	#				y = c[i][0][1]
-	# 				pose.pose.position.x = c[i][0][0]
-	# 				pose.pose.position.y = y	
-	# 				pose.pose.position.z = 0.
-	# 				pose.pose.orientation.x = 0.0
-	# 				pose.pose.orientation.y = 0.0
-	# 				pose.pose.orientation.z = 1
-	# 				pose.pose.orientation.w = 0.16
+     try:
 
-	# 				posicao_atual.publish(pose)
-	# 				rospy.sleep(0.8)
-
-
-	# except rospy.ROSInterruptException:
-	#     print("Ocorreu uma excecao com o rospy")
-
-
+        while not rospy.is_shutdown():
+            pose = geometry_msgs.msg.PoseStamped()
+            pose.header.frame_id = "/odom"
+            for c in contours:
+                if terminou == True:
+                    for i in range(c.shape[0]):
+				# OS QUATRO PRIMEIROS ELEMENTOS ESTAO MUITO ESTRANHO, MAS MESMO QUANDO RETIRADOS E O NUMERÓ É DIVIDIDO POR 100, O ROBO NAO ANDA
+        					
+                         pose.pose.position.x = round((c[i][0][0]/250.0),3)
+                         pose.pose.position.y = round((c[i][0][1]/250.0),3)
+                         pose.pose.position.z = 0.0
+                         pose.pose.orientation.x = 0.0
+                         pose.pose.orientation.y = 0.0
+                         pose.pose.orientation.z = 1
+                         pose.pose.orientation.w = 1
+                         print(pose.pose.position.x,pose.pose.position.y)
+                         posicao_atual.publish(pose)
+                         terminou = False
+                         rospy.sleep(0.5)
 
 
-
-	try:
-
-		while not rospy.is_shutdown():
-			pose = geometry_msgs.msg.PoseStamped()
-			pose.header.frame_id = "/odom"
-			for c in contours:
-
-				for i in range(c.shape[0]):
-					# OS QUATRO PRIMEIROS ELEMENTOS ESTAO MUITO ESTRANHO, MAS MESMO QUANDO RETIRADOS E O NUMERÓ É DIVIDIDO POR 100, O ROBO NAO ANDA
-					
-					pose.pose.position.x = round((c[i][0][0]/250.0),3)
-					pose.pose.position.y = round((c[i][0][1]/250.0),3)
-					pose.pose.position.z = 0.0
-					pose.pose.orientation.x = 0.0
-					pose.pose.orientation.y = 0.0
-					pose.pose.orientation.z = 1
-					pose.pose.orientation.w = 1
-
-					print(pose.pose.position.x,pose.pose.position.y)
-
-					posicao_atual.publish(pose)
-					rospy.sleep(4)
-
-
-	except rospy.ROSInterruptException:
-	    print("Ocorreu uma excecao com o rospy")
+     except rospy.ROSInterruptException:
+         print("Ocorreu uma excecao com o rospy")
