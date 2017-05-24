@@ -33,43 +33,44 @@ def criaContorno(imagem): #retorna array de contornos com aprox.
 
 
 def ver_atualizacao(dado):
-	print("Aualizacao de goal")
+	print("Aualizacao de goal", dado)
 	if dado.status == 0 or dado.status == 1 or dado.status == 3:
 	    terminou = True
 
 if __name__=="__main__":
 
      rospy.init_node("projetofinal")
-     posicao_atual = rospy.Publisher("move_base_simple/goal", PoseStamped, queue_size = 1)
+     posicao_atual = rospy.Publisher("move_base_simple/goal", PoseStamped)
      contours = criaContorno("/home/borg/catkin_ws/src/robotica16/Cheneato/scripts/linha.png")
      first_status = rospy.Subscriber("move_base/result", MoveBaseActionResult, ver_atualizacao)
 
      try:
 
         while not rospy.is_shutdown():
-            pose = geometry_msgs.msg.PoseStamped()
-            pose.header.frame_id = "/odom"
-            lista = [(3.0,0.0),(3.0,3.0),(3.0,0.0),(0.0,0.0)]
+
+            lista = [(4.0,1.0),(3.0,3.0),(3.0,0.0),(0.0,0.0)]
             i=0
 
             while i < len(lista):	
             	if terminou == True:
-				# OS QUATRO PRIMEIROS ELEMENTOS ESTAO MUITO ESTRANHO, MAS MESMO QUANDO RETIRADOS E O NUMERÓ É DIVIDIDO POR 100, O ROBO NAO ANDA
-        					
-                         #pose.pose.position.x = round((c[i][0][0]/250.0),3)
-                         #pose.pose.position.y = round((c[i][0][1]/250.0),3)
-                         pose.pose.position.x = lista[i][0]
-                         pose.pose.position.y = lista[i][1]
-                         pose.pose.position.z = 0.0
-                         pose.pose.orientation.x = 0.0
-                         pose.pose.orientation.y = 0.0
-                         pose.pose.orientation.z = 1
-                         pose.pose.orientation.w = 1
-                 
-                         posicao_atual.publish(pose)
-                         print(pose.pose.position.x,pose.pose.position.y)
-                         terminou = False
-                         i+=1
+					# OS QUATRO PRIMEIROS ELEMENTOS ESTAO MUITO ESTRANHO, MAS MESMO QUANDO RETIRADOS E O NUMERÓ É DIVIDIDO POR 100, O ROBO NAO ANDA
+
+					#pose.pose.position.x = round((c[i][0][0]/250.0),3)
+					#pose.pose.position.y = round((c[i][0][1]/250.0),3)
+					pose = geometry_msgs.msg.PoseStamped()
+					pose.header.frame_id = "/odom"
+					pose.pose.position.x = lista[i][0]
+					pose.pose.position.y = lista[i][1]
+					pose.pose.position.z = 0.0
+					pose.pose.orientation.x = 0.0
+					pose.pose.orientation.y = 0.0
+					pose.pose.orientation.z = 1
+					pose.pose.orientation.w = 1
+
+					posicao_atual.publish(pose)
+					print(pose.pose.position.x,pose.pose.position.y)
+					terminou = False
+					i+=1
                 else:
                 	print("fazendo nada")
                 rospy.sleep(0.1)
