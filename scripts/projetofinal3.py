@@ -11,7 +11,7 @@ import cv2
 import rospy
 import geometry_msgs.msg
 
-terminou = True
+terminou = False
 
 # Load the image in color
 #def criaContorno(imagem): #retorna array de contornos com aprox.
@@ -33,15 +33,13 @@ terminou = True
 
 
 def ver_atualizacao(dado):
-    print("Aualizacao de goal")
-    print(dado)
     if dado.status == 0 or dado.status == 1 or dado.status == 3:
         terminou = True
 
 if __name__=="__main__":
 
      rospy.init_node("projetofinal")
-     posicao_atual = rospy.Publisher("move_base_simple/goal", PoseStamped)
+     posicao_atual = rospy.Publisher("move_base_simple/goal", PoseStamped, queue_size=1)
      #contours = criaContorno("/home/borg/catkin_ws/src/robotica16/Cheneato/scripts/linha.png")
      first_status = rospy.Subscriber("move_base/result", MoveBaseActionResult, ver_atualizacao)
 
@@ -50,7 +48,7 @@ if __name__=="__main__":
         while not rospy.is_shutdown():
             pose = geometry_msgs.msg.PoseStamped()
             pose.header.frame_id = "/odom"
-            lista = [(3.0,1.0),(3.0,3.0),(3.0,0.0),(0.0,0.0)]
+            lista = [(3.0,0.0),(3.0,3.0),(3.0,0.0),(0.0,0.0)]
             i=0
 
     #         while i < len(lista):	
@@ -88,10 +86,91 @@ if __name__=="__main__":
             pose.pose.orientation.z = 1
             pose.pose.orientation.w = 1
 
-            print("pose a ir", pose)
             posicao_atual.publish(pose)
-            rospy.sleep(10.0)
-            print("Bye")
+            if terminou == True:
+                print("TRUE1")
+                rospy.sleep(1)
+            else:
+                print("FALSE1")
+                pose.pose.position.x = lista[0][0]
+                pose.pose.position.y = lista[0][1]
+                pose.pose.position.z = 0.0
+                pose.pose.orientation.x = 0.0
+                pose.pose.orientation.y = 0.0
+                pose.pose.orientation.z = 1
+                pose.pose.orientation.w = 1
+                rospy.sleep(0.5)
+                        
+            # pose.pose.position.x = lista[1][0]
+            # pose.pose.position.y = lista[1][1]
+            # pose.pose.position.z = 0.0
+            # pose.pose.orientation.x = 0.0
+            # pose.pose.orientation.y = 0.0
+            # pose.pose.orientation.z = 1
+            # pose.pose.orientation.w = 1
+
+            # posicao_atual.publish(pose)
+            # if terminou == True:
+            #     print("TRUE2")
+            #     rospy.sleep(1)
+            # else:
+            #     print("FALSE2")
+            #     pose.pose.position.x = lista[1][0]
+            #     pose.pose.position.y = lista[1][1]
+            #     pose.pose.position.z = 0.0
+            #     pose.pose.orientation.x = 0.0
+            #     pose.pose.orientation.y = 0.0
+            #     pose.pose.orientation.z = 1
+            #     pose.pose.orientation.w = 1
+            #     rospy.sleep(0.5)
+
+            # pose.pose.position.x = lista[2][0]
+            # pose.pose.position.y = lista[2][1]
+            # pose.pose.position.z = 0.0
+            # pose.pose.orientation.x = 0.0
+            # pose.pose.orientation.y = 0.0
+            # pose.pose.orientation.z = 1
+            # pose.pose.orientation.w = 1
+
+            # posicao_atual.publish(pose)
+            # if terminou == True:
+            #     print("TRUE3")
+            #     rospy.sleep(1)
+            # else:
+            #     print("FALSE3")
+            #     pose.pose.position.x = lista[2][0]
+            #     pose.pose.position.y = lista[2][1]
+            #     pose.pose.position.z = 0.0
+            #     pose.pose.orientation.x = 0.0
+            #     pose.pose.orientation.y = 0.0
+            #     pose.pose.orientation.z = 1
+            #     pose.pose.orientation.w = 1
+            #     rospy.sleep(0.5)
+            
+            # pose.pose.position.x = lista[3][0]
+            # pose.pose.position.y = lista[3][1]
+            # pose.pose.position.z = 0.0
+            # pose.pose.orientation.x = 0.0
+            # pose.pose.orientation.y = 0.0
+            # pose.pose.orientation.z = 1
+            # pose.pose.orientation.w = 1
+
+            # posicao_atual.publish(pose)
+            # if terminou == True:
+            #     print("TRUE4")
+            #     rospy.sleep(1)
+            # else:
+            #     print("FALSE4")
+            #     pose.pose.position.x = lista[3][0]
+            #     pose.pose.position.y = lista[3][1]
+            #     pose.pose.position.z = 0.0
+            #     pose.pose.orientation.x = 0.0
+            #     pose.pose.orientation.y = 0.0
+            #     pose.pose.orientation.z = 1
+            #     pose.pose.orientation.w = 1
+            #     rospy.sleep(0.5)
+
+                        
                         
 
 

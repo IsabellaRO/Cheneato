@@ -3,6 +3,7 @@
 
 from geometry_msgs.msg import Transform, Pose, PoseStamped, Point, Point32, PointStamped, Vector3, Vector3Stamped, Quaternion
 from std_msgs.msg import Header
+import actionlib_msgs.msg
 import tf.transformations
 import copy
 import numpy as np
@@ -11,7 +12,7 @@ import rospy
 import geometry_msgs.msg
 from move_base_msgs.msg import MoveBaseActionResult
 
-terminou = True
+terminou = False
 
 # Load the image in color
 def criaContorno(imagem): #retorna array de contornos com aprox.
@@ -32,17 +33,19 @@ def criaContorno(imagem): #retorna array de contornos com aprox.
     return contours
 
 
-def ver_atualizacao(dado):
-    print("atualizacao de status", dado.status)
-    if dado.status == 0 or dado.status == 1 or dado.status == 3:
-        print("status: ", dado.status)
+def ver_atualizacao(goal_id):
+    goal_id = goal_id.status.status
+    #goal foi atingido ou esta no caminho
+    if goal_id == 0 or goal_id == 1 or goal_id == 3:
         terminou = True
+        print("chegou")
+
 
 if __name__=="__main__":
 
      rospy.init_node("projetofinal")
      posicao_atual = rospy.Publisher("move_base_simple/goal", PoseStamped, queue_size = 1)
-     contours = criaContorno("/home/borg/catkin_ws/src/robotica16/Cheneato/scripts/linha.png")
+     contours = criaContorno("/home/borg/catkin_ws/src/robotica16/Cheneato/scripts/circle.jpg")
      first_status = rospy.Subscriber("move_base/result", MoveBaseActionResult, ver_atualizacao)
 
      try:
@@ -51,23 +54,36 @@ if __name__=="__main__":
             pose = geometry_msgs.msg.PoseStamped()
             pose.header.frame_id = "/odom"
             for c in contours:
-                if terminou == True:
-                    for i in range(4, c.shape[0]):
-                # OS QUATRO PRIMEIROS ELEMENTOS ESTAO MUITO ESTRANHO, MAS MESMO QUANDO RETIRADOS E O NUMERÓ É DIVIDIDO POR 100, O ROBO NAO ANDA
+                i=0
+                while i < (c.shape[0]):
                             
-                         pose.pose.position.x = round((c[i][0][0]/250.0),3)
-                         pose.pose.position.y = round((c[i][0][1]/250.0),3)
-                         pose.pose.position.z = 0.0
-                         pose.pose.orientation.x = 0.0
-                         pose.pose.orientation.y = 0.0
-                         pose.pose.orientation.z = 1
-                         pose.pose.orientation.w = 1
-                         print(pose.pose.position.x,pose.pose.position.y)
-                         posicao_atual.publish(pose)
-                         terminou = False
-                         while(terminou == False):
-                            rospy.sleep(0.1)
-                         rospy.sleep(0.5)
+                    pose.pose.position.x = round((c[i][0][0]/250.0),3)
+                    pose.pose.position.y = round((c[i][0][1]/250.0),3)
+                    pose.pose.position.z = 0.0
+                    pose.pose.orientation.x = 0.0
+                    pose.pose.orientation.y = 0.0
+                    pose.pose.orientation.z = 1
+                    pose.pose.orientation.w = 1
+
+                    posicao_atual.publish(pose)
+
+
+                    if terminou == False:
+                        #se ele ainda nao chegou, o goal é repetido ate que chegue
+                        print("chegando")
+                        pose.pose.position.x = round((c[i][0][0]/250.0),3)
+                        pose.pose.position.y = round((c[i][0][1]/250.0),3)
+                        pose.pose.position.z = 0.0
+                        pose.pose.orientation.x = 0.0
+                        pose.pose.orientation.y = 0.0
+                        pose.pose.orientation.z = 1
+                        pose.pose.orientation.w = 1
+                        rospy.sleep(0.5)
+
+                    i+=1
+                    
+                    rospy.sleep(1)
+
 
 
      except rospy.ROSInterruptException:
