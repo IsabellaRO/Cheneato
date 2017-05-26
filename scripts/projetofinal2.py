@@ -19,7 +19,7 @@ def criaContorno(imagem): #retorna array de contornos com aprox.
 	im = cv2.imread( imagem ,cv2.IMREAD_COLOR) #Le a imagem
 	imgray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY) #Converte pro cinza
 	ret,thresh = cv2.threshold(imgray,127,255,0) #cinza para preto e branco
-	cv2.imwrite('foto.png', thresh) #salva foto
+	cv2.imwrite('quadrado.png', thresh) #salva foto
 	contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE) #encontra contornos com aproximacao
 	contorno = (255-thresh) #inverte preto e branco
 	##cv2.imwrite('lalala.png', contorno) #salva imagem
