@@ -46,7 +46,7 @@ if __name__=="__main__":
 
      rospy.init_node("projetofinal")
      posicao_atual = rospy.Publisher("move_base_simple/goal", PoseStamped, queue_size = 1) #retorna a posição atual do robo
-     contours = criaContorno("/home/borg/catkin_ws/src/robotica16/Cheneato/scripts/linha.png") #chama a função cria contorno
+     contours = criaContorno("/home/borg/catkin_ws/src/robotica16/Cheneato/scripts/passaro.jpg") #chama a função cria contorno
      first_status = rospy.Subscriber("move_base/result", MoveBaseActionResult, ver_atualizacao) #retorna se o robo concluiu ou não o movimento
 
      try:
@@ -61,8 +61,8 @@ if __name__=="__main__":
             lista2= [] #lista da posição atual
             qu = [quaternion_from_euler(0,0,math.pi/2)] #
             while j < (c.shape[0]):
-                lista1.append([round((c[j-1][0][0]/100.0),3), round((c[j-1][0][1]/100.0),3)])
-                lista2.append([round((c[j][0][0]/100.0),3), round((c[j][0][1]),3)/100.0])
+                lista1.append([round((c[j-1][0][0]/250.0),3), round((c[j-1][0][1]/250.0),3)])
+                lista2.append([round((c[j][0][0]/250.0),3), round((c[j][0][1]),3)/250.0])
                 delta_x = (lista2[j-1][0]-lista1[j-1][0])
                 delta_y = (lista2[j-1][1]-lista1[j-1][1])
                 if delta_x == 0:
@@ -75,8 +75,8 @@ if __name__=="__main__":
             
             while i < (c.shape[0]):
                 
-                pose.pose.position.x = round((c[i][0][0]/100.0),3)
-                pose.pose.position.y = round((c[i][0][1]/100.0),3)
+                pose.pose.position.x = round((c[i][0][0]/250.0),3)
+                pose.pose.position.y = round((c[i][0][1]/250.0),3)
                 pose.pose.position.z = 0.0
                 pose.pose.orientation.x = qu[i][0]
                 pose.pose.orientation.y = qu[i][1]
@@ -89,8 +89,8 @@ if __name__=="__main__":
                 if terminou == False:
                     #se ele ainda nao chegou, o goal é repetido ate que chegue
                     print(pose.pose.position.x, pose.pose.position.y)
-                    pose.pose.position.x = round((c[i][0][0]/100.0),3)
-                    pose.pose.position.y = round((c[i][0][1]/100.0),3)
+                    pose.pose.position.x = round((c[i][0][0]/250.0),3)
+                    pose.pose.position.y = round((c[i][0][1]/250.0),3)
                     pose.pose.position.z = 0.0
                     pose.pose.orientation.x = qu[i][0]
                     pose.pose.orientation.y = qu[i][1]
